@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "🧪 Running full test suite..."
+yarn test --passWithNoTests
