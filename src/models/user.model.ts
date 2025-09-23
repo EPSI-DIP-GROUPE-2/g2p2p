@@ -10,7 +10,6 @@ import {
 	Unique,
 } from 'sequelize-typescript'
 import { crypto } from '@src/utils'
-import { IsString } from 'class-validator'
 import { Effect } from 'effect/index'
 
 export type UserInput = {
@@ -34,7 +33,6 @@ export class UserModel extends Model<UserModel, UserInput> {
 		type: DataType.STRING,
 		allowNull: false,
 	})
-	@IsString()
 	username!: string
 
 	@Unique
@@ -42,7 +40,6 @@ export class UserModel extends Model<UserModel, UserInput> {
 		type: DataType.STRING,
 		allowNull: false,
 	})
-	@IsString()
 	password!: string
 
 	@BeforeCreate

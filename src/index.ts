@@ -9,7 +9,6 @@ import { Interceptors } from '@src/interceptors'
 
 import express from 'express'
 
-/* eslint-disable @typescript-eslint/require-await */
 export async function bootstrap() {
 	const app = express()
 
@@ -22,7 +21,6 @@ export async function bootstrap() {
 
 	return app
 }
-/* eslint-enable @typescript-eslint/require-await */
 
 /* istanbul ignore next */ // Ignore this block in test coverage
 if (require.main === module)

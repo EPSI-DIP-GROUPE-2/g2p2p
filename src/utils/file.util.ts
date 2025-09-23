@@ -1,6 +1,4 @@
 import fs from 'fs'
-import path from 'path'
-import stream from 'stream'
 
 import { Effect } from 'effect'
 

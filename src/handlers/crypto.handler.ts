@@ -1,4 +1,3 @@
-import { resolve4 } from 'dns'
 import { Data } from 'effect'
 
 export class HashError extends Data.TaggedError('Hash') {
