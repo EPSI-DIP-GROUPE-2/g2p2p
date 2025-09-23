@@ -1,0 +1,7 @@
+# Ignore all files by default
+**
+
+!package*.json
+!yarn.lock
+!tsconfig*.json
+!src/
