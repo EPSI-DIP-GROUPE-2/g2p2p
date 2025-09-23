@@ -41,7 +41,7 @@ export const verify = (token: string) =>
 	Effect.gen(function* () {
 		const { publicKey } = yield* keys
 		const decoded = yield* Effect.try({
-			try: () => jwt.verify(token, publicKey) as AccessToken,
+			try: () => jwt.verify(token, publicKey) as unknown as AccessToken,
 			catch: error => new TokenHandler.InvalidTokenError(error),
 		})
 

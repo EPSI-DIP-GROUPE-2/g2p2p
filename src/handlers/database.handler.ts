@@ -1,4 +1,5 @@
 import { Data } from 'effect'
+import { Json } from '@src/types/response.type'
 import {
 	ValidationError,
 	TimeoutError,
@@ -7,6 +8,41 @@ import {
 	DatabaseError,
 	UniqueConstraintError,
 } from 'sequelize'
+
+export enum Models {
+	USER = 'user',
+}
+
+export class NotFound extends Data.TaggedError('DatabaseNotFound') {
+	public readonly title = 'Could not find database record'
+	public readonly message: string
+	public readonly response: Json
+	public readonly model: Models
+
+	constructor(model: Models) {
+		super()
+		this.model = model
+		this.message = this.parse()
+		this.response = {
+			status: 404,
+			message: this.message,
+			type: 'not_found',
+			errors: [],
+		}
+	}
+
+	parse() {
+		let message = 'Item not found.'
+
+		switch (this.model) {
+			case Models.USER:
+				message = 'User not found.'
+				break
+		}
+
+		return message
+	}
+}
 
 export class AuthError extends Data.TaggedError('Auth') {
 	public readonly title = 'Could not Authenticate to the Database'

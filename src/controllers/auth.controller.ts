@@ -1,0 +1,57 @@
+import { Effect, Data } from 'effect'
+import { Request, Response } from 'express'
+import { AuthSchema } from '@src/schemas'
+import { UserService } from '@src/services'
+import { config, crypto, jwt, logger } from '@src/utils'
+import { Json } from '@src/types/response.type'
+import { AccessToken } from '@src/types/token.type'
+import { ResponseHandler } from '@src/handlers'
+
+class InvalidPasswordError extends Data.TaggedError('InvalidPassword') {}
+
+export const loginHandler = (
+	{ body }: Request<unknown, unknown, AuthSchema.Login['body']>,
+	res: Response
+) =>
+	Effect.gen(function* () {
+		const user = yield* UserService.findOne(body.username)
+
+		const hashed = yield* crypto.hashString(body.password)
+		if (hashed !== user.password) return yield* Effect.fail(new InvalidPasswordError())
+
+		const token = yield* jwt.sign({
+			expire: yield* config.get<number>('jwt.expire'),
+			sub: user.id,
+			username: user.username,
+		} as AccessToken)
+
+		res.cookie('accessToken', token, {
+			httpOnly: true,
+			sameSite: 'strict',
+			secure: yield* config.get<boolean>('jwt.secure'),
+			expires: new Date(new Date().getTime() + (yield* config.get<number>('jwt.expire'))),
+			path: '/',
+		})
+
+		return yield* Effect.succeed({
+			status: 200,
+		} as Json)
+	}).pipe(
+		Effect.catchTags({
+			DatabaseNotFound: error => Effect.succeed(error.response),
+			InvalidPassword: () =>
+				Effect.succeed({
+					status: 400,
+					message: 'Invalid password.',
+					type: 'validation',
+					errors: [],
+				} as Json),
+		}),
+		Effect.catchAll(error => {
+			logger.error(`${error.title} ${error.message}`)
+
+			return Effect.succeed({ ...ResponseHandler.UnexpectedErrorResponse, message: error.message })
+		}),
+		Effect.andThen(response => res.status(response.status).json(response)),
+		Effect.runPromise
+	)

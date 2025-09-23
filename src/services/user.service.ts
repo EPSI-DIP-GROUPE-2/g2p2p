@@ -32,7 +32,12 @@ export const findOne = (
 			})
 		},
 		catch: (error: unknown) => new DatabaseHandler.QueryError(error),
-	})
+	}).pipe(
+		Effect.flatMap(result => {
+			if (!result) return new DatabaseHandler.NotFound(DatabaseHandler.Models.USER)
+			return Effect.succeed(result)
+		})
+	)
 
 export const create = (input: UserInput) =>
 	Effect.tryPromise({
@@ -44,21 +49,18 @@ export const create = (input: UserInput) =>
 	})
 
 export const initializeUser = () =>
-	getCount
-		.pipe(
-			Effect.flatMap(count => {
-				if (count > 0) return findOne()
-				return create({
-					username: 'admin',
-					password: 'admin',
-				})
+	getCount.pipe(
+		Effect.flatMap(count => {
+			if (count > 0) return findOne()
+			return create({
+				username: 'admin',
+				password: 'admin',
 			})
-		)
-		.pipe(
-			Effect.catchAll(error => {
-				logger.error(`${error.title}, ${error.message}`)
-				process.exit(1)
-				return Effect.fail(error)
-			}),
-			Effect.runPromise
-		)
+		}),
+		Effect.catchAll(error => {
+			logger.error(`${error.title}, ${error.message}`)
+			process.exit(1)
+			return Effect.fail(error)
+		}),
+		Effect.runPromise
+	)
