@@ -10,6 +10,7 @@ RUN yarn install --frozen-lockfile
 
 COPY . .
 RUN yarn build
+RUN yarn build:static
 
 # Install only prod deps into separate folder
 RUN yarn install --frozen-lockfile --production --modules-folder /build/node_modules_prod
