@@ -5,6 +5,7 @@ import 'config'
 import { assignRoutes } from './routes'
 import { logger, config, database, jwt } from '@src/utils'
 
+import { UserService } from '@src/services'
 import { Interceptors } from '@src/interceptors'
 
 import express from 'express'
@@ -14,6 +15,7 @@ export async function bootstrap() {
 
 	await jwt.loadJWTKeys()
 	await database.connect()
+	await UserService.initializeUser()
 
 	// Assign Interceptors
 	Interceptors.forEach(interceptor => interceptor(app))

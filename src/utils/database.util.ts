@@ -105,7 +105,7 @@ export const auth = (sequelizeInstance: Sequelize) =>
  */
 export const sync = (sequelizeInstance: Sequelize) =>
 	Effect.tryPromise({
-		try: () => sequelizeInstance.sync({ force: true }),
+		try: () => sequelizeInstance.sync(),
 		catch: error => new DatabaseHandler.SyncError(error),
 	}).pipe(Effect.tap(() => logger.debug('Database synchronized')))
 
