@@ -1,0 +1,7 @@
+---
+logs:
+  level: http
+
+http:
+  port: 3000
+  proxies: 1
