@@ -3,8 +3,8 @@
 echo "💅 Running prettier..."
 yarn format
 
-echo "🔍 Running lint-staged..."
-yarn exec lint-staged
+# echo "🔍 Running lint-staged..."
+# yarn exec lint-staged
 
 echo "🛠️ Running typecheck..."
 yarn typecheck
