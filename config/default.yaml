@@ -3,7 +3,7 @@ logs:
   level: http
 
 database:
-  path: /var/opt/echo.sqlite
+  path: /var/opt/echo
 
 http:
   port: 3000

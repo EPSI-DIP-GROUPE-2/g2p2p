@@ -9,6 +9,8 @@ import { DatabaseHandler, FileHandler } from '@src/handlers'
 import * as FileUtils from './file.util'
 import { logger } from './logger.util'
 
+import * as Models from '@src/models'
+
 /**
  * A utility function to register models with a given Sequelize instance.
  * This function ensures that the specified models are properly added to the Sequelize instance.
@@ -38,7 +40,7 @@ import { logger } from './logger.util'
 export const addModels = (sequelizeInstance: Sequelize) =>
 	Effect.try({
 		try: () => {
-			sequelizeInstance.addModels([])
+			sequelizeInstance.addModels([Models.UserModel])
 		},
 		catch: error => new DatabaseHandler.ModelError(error),
 	}).pipe(Effect.tap(() => logger.debug('Added database models.')))
@@ -103,7 +105,7 @@ export const auth = (sequelizeInstance: Sequelize) =>
  */
 export const sync = (sequelizeInstance: Sequelize) =>
 	Effect.tryPromise({
-		try: () => sequelizeInstance.sync(),
+		try: () => sequelizeInstance.sync({ force: true }),
 		catch: error => new DatabaseHandler.SyncError(error),
 	}).pipe(Effect.tap(() => logger.debug('Database synchronized')))
 
