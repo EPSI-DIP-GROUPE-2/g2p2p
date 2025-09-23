@@ -3,7 +3,7 @@ dotenv.config({ quiet: true }) // Load environment
 
 import 'config'
 import { assignRoutes } from './routes'
-import { logger, config } from '@src/utils'
+import { logger, config, database } from '@src/utils'
 
 import { Interceptors } from '@src/interceptors'
 
@@ -12,6 +12,8 @@ import express from 'express'
 /* eslint-disable @typescript-eslint/require-await */
 export async function bootstrap() {
 	const app = express()
+
+	await database.connect()
 
 	// Assign Interceptors
 	Interceptors.forEach(interceptor => interceptor(app))

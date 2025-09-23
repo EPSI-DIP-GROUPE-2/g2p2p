@@ -1,0 +1,10 @@
+---
+logs:
+  level: LOG_LEVEL
+
+database:
+  path: 'DATABASE_PATH'
+
+http:
+  port: HTTP_PORT
+  proxies: HTTP_PROXIES
