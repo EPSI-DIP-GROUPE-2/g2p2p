@@ -55,3 +55,25 @@ export const loginHandler = (
 		Effect.andThen(response => res.status(response.status).json(response)),
 		Effect.runPromise
 	)
+
+export const meHandler = (req: Request, res: Response) =>
+	UserService.findOne((req as Request & { user: AccessToken }).user.username).pipe(
+		Effect.flatMap(user => {
+			return Effect.succeed({
+				status: 200,
+				data: {
+					id: user.id,
+					username: user.username,
+					createdAt: user.createdAt as string,
+					updatedAt: user.updatedAt as string,
+				},
+			} as Json)
+		}),
+		Effect.catchAll(error => {
+			logger.error(`${error.title} ${error.message}`)
+
+			return Effect.succeed({ ...ResponseHandler.UnexpectedErrorResponse, message: error.message })
+		}),
+		Effect.andThen(response => res.status(response.status).json(response)),
+		Effect.runPromise
+	)

@@ -1,4 +1,4 @@
-import { Effect, pipe } from 'effect'
+import { Effect } from 'effect'
 import { logger } from '@src/utils'
 import { UserInput, UserModel } from '@src/models'
 import { DatabaseHandler } from '@src/handlers'

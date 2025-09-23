@@ -19,7 +19,7 @@ export const validateMiddleware =
 			})
 
 			Object.assign(req.body, body)
-			Object.assign(req.query as any, query)
+			Object.assign(req.query as object, query)
 			Object.assign(req.params, params)
 
 			return yield* Effect.succeed(true)
