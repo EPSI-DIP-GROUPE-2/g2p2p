@@ -8,3 +8,11 @@ database:
 http:
   port: 3000
   proxies: 1
+
+jwt:
+  secure: false
+  algorithm: RS256
+  expire: 1000 * 60 * 30
+  keys:
+    private: /etc/opt/echo/jwt/private.key
+    public: /etc/opt/echo/jwt/public.key

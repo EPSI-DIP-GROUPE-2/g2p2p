@@ -3,7 +3,7 @@ dotenv.config({ quiet: true }) // Load environment
 
 import 'config'
 import { assignRoutes } from './routes'
-import { logger, config, database } from '@src/utils'
+import { logger, config, database, jwt } from '@src/utils'
 
 import { Interceptors } from '@src/interceptors'
 
@@ -12,6 +12,7 @@ import express from 'express'
 export async function bootstrap() {
 	const app = express()
 
+	await jwt.loadJWTKeys()
 	await database.connect()
 
 	// Assign Interceptors

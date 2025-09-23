@@ -8,3 +8,10 @@ database:
 http:
   port: HTTP_PORT
   proxies: HTTP_PROXIES
+
+jwt:
+  secure: JWT_SECURE
+  expire: JWT_EXPIRE
+  keys:
+    private: JWT_KEY_PRIVATE
+    public: JWT_KEY_PUBLIC

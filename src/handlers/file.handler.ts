@@ -1,10 +1,13 @@
 import { Data } from 'effect'
 
+export type FileOperation = 'MKDIR' | 'ACCESS' | 'WRITE' | 'READ'
+
 export class AccessError extends Data.TaggedError('Access') {
 	public readonly title: string
 	public readonly file: string
 	public readonly error: unknown
 	public readonly message: string
+	public readonly operation: FileOperation
 	public code:
 		| 'EEXIST'
 		| 'EACCESS'
@@ -14,12 +17,15 @@ export class AccessError extends Data.TaggedError('Access') {
 		| 'ENOSPC'
 		| 'EISDIR'
 		| 'UNEXPECTED'
-	constructor(error: unknown, file: string, opperation: 'MKDIR' | 'ACCESS' | 'WRITE' | 'READ') {
+	constructor(error: unknown, file: string, operation: FileOperation) {
 		super()
 		this.file = file
+		this.operation = operation
 
-		switch (opperation) {
+		switch (operation) {
 			case 'MKDIR':
+				this.title = `Could not make dir ${this.file}`
+				break
 			case 'WRITE':
 				this.title = `Could not write ${this.file}`
 				break
