@@ -10,4 +10,10 @@ export const assignRoutes = (app: Express) => {
 	app.get('/', (_req: Request, res: Response) =>
 		res.sendFile(path.resolve(__dirname, '../static/index.html'))
 	)
+	app.get('/home', (_req: Request, res: Response) =>
+		res.sendFile(path.resolve(__dirname, '../static/home.html'))
+	)
+	app.get('/auth', (_req: Request, res: Response) =>
+		res.sendFile(path.resolve(__dirname, '../static/auth.html'))
+	)
 }
