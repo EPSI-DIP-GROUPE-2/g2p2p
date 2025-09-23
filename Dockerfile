@@ -8,6 +8,8 @@ COPY yarn.lock package*.json ./
 
 RUN yarn install --frozen-lockfile
 
+ENV NODE_ENV=production
+
 COPY . .
 RUN yarn build
 RUN yarn build:static
