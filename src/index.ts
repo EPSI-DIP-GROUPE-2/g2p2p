@@ -9,9 +9,14 @@ import { UserService } from '@src/services'
 import { Interceptors } from '@src/interceptors'
 
 import express from 'express'
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
 
 export async function bootstrap() {
 	const app = express()
+	app.use(bodyParser.urlencoded({ extended: false }))
+	app.use(bodyParser.json())
+	app.use(cookieParser())
 
 	await jwt.loadJWTKeys()
 	await database.connect()
