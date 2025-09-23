@@ -1,6 +1,7 @@
 FROM node:22.19.0-alpine3.22 AS builder
 
 ENV HUSKY=0
+ENV SUPPRESS_NO_CONFIG_WARNING=1
 
 WORKDIR /build
 COPY yarn.lock package*.json ./
@@ -23,6 +24,8 @@ WORKDIR /app
 COPY --from=builder /build/node_modules_prod ./node_modules
 COPY --from=builder /build/dist ./dist
 COPY --from=builder /build/package.json ./
+COPY --from=builder /build/config ./config
+COPY --from=builder /build/static ./static
 
 RUN chown -R node:node /app && chmod -R 700 /app
 USER node
