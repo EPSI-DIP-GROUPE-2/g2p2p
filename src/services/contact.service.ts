@@ -1,5 +1,5 @@
 import { Effect } from 'effect'
-import { logger, crypto } from '@src/utils'
+import { logger, crypto, socket } from '@src/utils'
 import { ContactModel } from '@src/models'
 import { DatabaseHandler } from '@src/handlers'
 import { ContactSchema } from '@src/schemas'
@@ -14,18 +14,18 @@ export const findAll = () =>
 	})
 
 export const create = ({ username, public_key }: ContactSchema.Create['body']) =>
-	Effect.gen(function* () {
-		const identifier = yield* crypto.hashString(public_key)
-
-		return yield* Effect.tryPromise({
-			try: () => {
-				logger.info('Create contact')
-				return ContactModel.create({
-					username,
-					public_key,
-					identifier,
-				})
-			},
-			catch: (error: unknown) => new DatabaseHandler.QueryError(error),
-		})
-	})
+	crypto.hashString(public_key).pipe(
+		Effect.tap(() => logger.info('Create contact')),
+		Effect.flatMap(identifier =>
+			Effect.tryPromise({
+				try: () =>
+					ContactModel.create({
+						username,
+						public_key,
+						identifier,
+					}),
+				catch: (error: unknown) => new DatabaseHandler.QueryError(error),
+			})
+		),
+		Effect.tap(contact => socket.emit('contacts:append', contact))
+	)
