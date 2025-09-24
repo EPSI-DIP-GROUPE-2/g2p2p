@@ -21,6 +21,9 @@ export const assignRoutes = (app: Express) => {
 	app.get('/auth', (_req: Request, res: Response) =>
 		res.sendFile(path.resolve(__dirname, '../static/auth.html'))
 	)
+	app.get('/register', (_req: Request, res: Response) =>
+		res.sendFile(path.resolve(__dirname, '../static/register.html'))
+	)
 
 	// Auth controllers
 	app.post('/api/login', validateMiddleware(AuthSchema.login), AuthController.loginHandler)
