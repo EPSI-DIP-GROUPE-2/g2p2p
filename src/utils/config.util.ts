@@ -3,7 +3,7 @@ import { logger } from './logger.util'
 import { Effect } from 'effect'
 import { ConfigError } from '@src/handlers'
 
-export const get = <T extends string | number>(key: string) =>
+export const get = <T extends string | number | boolean>(key: string) =>
 	Effect.gen(function* () {
 		return yield* Effect.try({
 			try: () => config.get<T>(key),

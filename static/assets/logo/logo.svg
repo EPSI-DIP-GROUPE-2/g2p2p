@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" role="img" aria-label="Echo logo">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#66bb6a"/>
+      <stop offset="1" stop-color="#a8e6cf"/>
+    </linearGradient>
+  </defs>
+  <rect width="180" height="180" rx="28" fill="#23272a"/>
+  <!-- bulle de message -->
+  <path d="M45 60a30 26 0 0 1 30-26h30a30 26 0 0 1 30 26v12a30 26 0 0 1-30 26H86l-16 14a4 4 0 0 1-6-3v-11A30 26 0 0 1 45 72V60z" fill="none" stroke="url(#g)" stroke-width="4" />
+  <!-- ondes sonar -->
+  <circle cx="90" cy="84" r="10" fill="url(#g)"/>
+  <circle cx="90" cy="84" r="24" fill="none" stroke="url(#g)" stroke-width="3" opacity=".9"/>
+  <circle cx="90" cy="84" r="38" fill="none" stroke="url(#g)" stroke-width="2.5" opacity=".7"/>
+  <circle cx="90" cy="84" r="52" fill="none" stroke="url(#g)" stroke-width="2" opacity=".5"/>
+</svg>

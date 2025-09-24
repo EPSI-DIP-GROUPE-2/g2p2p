@@ -2,6 +2,17 @@
 logs:
   level: http
 
+database:
+  path: /var/opt/echo
+
 http:
   port: 3000
   proxies: 1
+
+jwt:
+  secure: false
+  algorithm: RS256
+  expire: 1296000000 # 15 days
+  keys:
+    private: /etc/opt/echo/jwt/private.key
+    public: /etc/opt/echo/jwt/public.key
