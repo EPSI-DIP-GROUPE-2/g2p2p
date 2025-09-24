@@ -9,7 +9,7 @@ import { DatabaseHandler, FileHandler } from '@src/handlers'
 import * as FileUtils from './file.util'
 import { logger } from './logger.util'
 
-import * as Models from '@src/models'
+import { UserModel, ContactModel, MessageModel } from '@src/models'
 
 /**
  * A utility function to register models with a given Sequelize instance.
@@ -40,7 +40,7 @@ import * as Models from '@src/models'
 export const addModels = (sequelizeInstance: Sequelize) =>
 	Effect.try({
 		try: () => {
-			sequelizeInstance.addModels([Models.UserModel, Models.MessageModel])
+			sequelizeInstance.addModels([UserModel, MessageModel, ContactModel])
 		},
 		catch: error => new DatabaseHandler.ModelError(error),
 	}).pipe(Effect.tap(() => logger.debug('Added database models.')))
