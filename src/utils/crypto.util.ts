@@ -2,6 +2,7 @@ import { createHash, generateKeyPairSync } from 'crypto'
 import { Effect } from 'effect'
 import { logger } from './logger.util'
 import * as file from './file.util'
+import * as config from './config.util'
 import { CryptoHandler, FileHandler } from '@src/handlers'
 import { GeneratePairOptions } from '@src/types/crypto.type'
 
@@ -34,12 +35,12 @@ export const generatePair = (o?: Partial<GeneratePairOptions>) =>
 				generateKeyPairSync(options.algorithm, {
 					modulusLength: options.keySize,
 					publicKeyEncoding: {
-						type: 'pkcs1',
-						format: 'pem',
+						type: options.type,
+						format: options.format,
 					},
 					privateKeyEncoding: {
-						type: 'pkcs1',
-						format: 'pem',
+						type: options.type,
+						format: options.format,
 					},
 				}),
 			catch: (error: unknown) => new CryptoHandler.GenerateKeyError(options, error),
@@ -72,4 +73,35 @@ export const loadKeys = (keys: [string, string], o?: GeneratePairOptions) =>
 				return Effect.fail(error)
 			},
 		})
+	)
+
+export const keys = Effect.gen(function* () {
+	const privateKey = yield* config.get<string>('encryption.keys.private')
+	const publicKey = yield* config.get<string>('encryption.keys.public')
+
+	return { privateKey: yield* file.read(privateKey), publicKey: yield* file.read(publicKey) }
+})
+
+export const loadEncryptionKeys = () =>
+	Effect.all([
+		config.get<string>('encryption.keys.private'),
+		config.get<string>('encryption.keys.public'),
+	]).pipe(
+		Effect.flatMap(keys =>
+			loadKeys(keys, {
+				keySize: 4096,
+				type: 'pkcs1',
+				format: 'pem',
+				algorithm: 'rsa',
+			})
+		),
+		Effect.catchAll(error => {
+			if (error instanceof FileHandler.AccessError) {
+				console.log(error.operation)
+			}
+			logger.error(`${error.title}, ${error.message}`)
+			process.exit(1)
+			return Effect.fail(error)
+		}),
+		Effect.runPromise
 	)

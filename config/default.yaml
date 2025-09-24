@@ -10,6 +10,11 @@ http:
   port: 3000
   proxies: 1
 
+encryption:
+  keys:
+    private: /etc/opt/echo/encryption/private.key
+    public: /etc/opt/echo/encryption/public.key
+
 jwt:
   secure: false
   algorithm: RS256
