@@ -109,7 +109,7 @@ export const sync = (sequelizeInstance: Sequelize) =>
 			Effect.tryPromise({
 				try: () => {
 					logger.info('Synchronizing database.')
-					logger.warn('Using force synchronize results in a reset of the database.')
+					if (force) logger.warn('Using force synchronize results in a reset of the database.')
 					return sequelizeInstance.sync({ force })
 				},
 				catch: error => new DatabaseHandler.SyncError(error),

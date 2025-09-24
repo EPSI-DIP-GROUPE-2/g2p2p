@@ -1,0 +1,14 @@
+---
+database:
+  path: /var/opt/echo
+  sync: false
+
+encryption:
+  keys:
+    private: /etc/opt/echo/encryption/private.key
+    public: /etc/opt/echo/encryption/public.key
+
+jwt:
+  keys:
+    private: /etc/opt/echo/jwt/private.key
+    public: /etc/opt/echo/jwt/public.key
