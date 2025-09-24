@@ -4,6 +4,7 @@ logs:
 
 database:
   path: 'DATABASE_PATH'
+  sync: 'DATABASE_SYNC'
 
 http:
   port: HTTP_PORT

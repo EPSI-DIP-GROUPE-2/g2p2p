@@ -4,6 +4,7 @@ logs:
 
 database:
   path: /var/opt/echo
+  sync: false
 
 http:
   port: 3000

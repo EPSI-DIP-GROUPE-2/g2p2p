@@ -41,6 +41,7 @@ yarn start:dev
 ## Running the Project
 
 1. Set up configuration in `.env` via `config/custom-environment-variables.yaml` override.
+   > 🚨 if database model initialization fails add the following env variable `DATABASE_SYNC=true`
 2. Start the instance
 
 ```shell
