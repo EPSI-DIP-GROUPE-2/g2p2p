@@ -3,20 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Echo — Login</title>
+  <title>Echo — Create account</title>
   <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="/assets/dist/styles.css">
+  <link rel="stylesheet" href="/assets/dist/styles.css">
   <link rel="icon" href="/assets/logo/logo.svg" type="image/svg+xml">
 </head>
 <body>
   <header class="topbar">
-    <div><img src="/assets/logo/logo.svg" alt="" width="28" height="28"><strong>Echo</strong></div>
-    <nav><a href="index.html" class="btn" >Back</a></nav>
+    <div>
+      <img src="/assets/logo/logo.svg" alt="" width="28" height="28">
+      <strong>Echo</strong>
+    </div>
+    <nav>
+      <a href="auth.html" class="btn">Back</a>
+    </nav>
   </header>
 
   <main>
     <div class="card">
-      <h1>Authentication</h1>
+      <h1>Create account</h1>
       <form action="home.html" method="get">
         <div class="field">
           <label for="username">Username</label>
@@ -26,9 +31,12 @@
           <label for="password">Password</label>
           <input id="password" name="pass" type="password" placeholder="••••••••" required>
         </div>
+        <div class="field">
+          <label for="confirm">Confirm password</label>
+          <input id="confirm" name="confirm" type="password" placeholder="••••••••" required>
+        </div>
         <div class="actions">
-          <button class="btn" type="submit">Log in</button>
-          <a class="btn" href="register.html">Create account</a>
+          <button class="btn" type="submit">Create account</button>
         </div>
       </form>
     </div>
