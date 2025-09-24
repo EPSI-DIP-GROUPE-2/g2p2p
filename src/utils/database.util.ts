@@ -40,7 +40,7 @@ import * as Models from '@src/models'
 export const addModels = (sequelizeInstance: Sequelize) =>
 	Effect.try({
 		try: () => {
-			sequelizeInstance.addModels([Models.UserModel])
+			sequelizeInstance.addModels([Models.UserModel, Models.MessageModel])
 		},
 		catch: error => new DatabaseHandler.ModelError(error),
 	}).pipe(Effect.tap(() => logger.debug('Added database models.')))
