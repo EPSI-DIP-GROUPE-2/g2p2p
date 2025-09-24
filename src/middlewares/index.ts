@@ -1,2 +1,2 @@
 export * from './validate.middleware'
-export * from './auth.middleware'
+export * as AuthMiddleware from './auth.middleware'

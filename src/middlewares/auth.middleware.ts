@@ -1,14 +1,17 @@
 import { Data, Effect } from 'effect'
 import { Request, Response, NextFunction } from 'express'
 import type { Json } from '../types/response.type'
-import { jwt } from '@src/utils'
+import { logger, jwt } from '@src/utils'
 import { ResponseHandler } from '@src/handlers'
-import { AccessToken } from '@src/types/token.type'
+import { AccessToken, SocketUser } from '@src/types/token.type'
+import { ExtendedError, Socket } from 'socket.io'
+import { parse as parseCookies } from 'cookie'
+import { resolve4 } from 'dns'
 
 export class AuthError extends Data.TaggedError('Auth') {}
 export class RedirectError extends Data.TaggedError('Redirect') {}
 
-export default (req: Request & { user?: AccessToken }, res: Response, next: NextFunction) =>
+export const http = (req: Request & { user?: AccessToken }, res: Response, next: NextFunction) =>
 	Effect.gen(function* () {
 		if (req.cookies['accessToken']) {
 			const token = yield* jwt.verify(req.cookies['accessToken'] as string)
@@ -43,6 +46,38 @@ export default (req: Request & { user?: AccessToken }, res: Response, next: Next
 			}
 
 			return res.status(response.status).json(response)
+		}),
+		Effect.runPromise
+	)
+
+export const socket = (socket: Socket, next: (err?: ExtendedError) => void) =>
+	Effect.gen(function* () {
+		const cookieHeader = socket.request.headers.cookie
+		if (!cookieHeader) {
+			return yield* Effect.fail(new AuthError())
+		}
+
+		// // Parse cookies
+		const cookies = parseCookies(cookieHeader)
+		const token = cookies.accessToken
+		if (!token) return yield* Effect.fail(new AuthError())
+
+		const verified = yield* jwt.verify(token)
+
+		;(socket as SocketUser).user = verified
+
+		return yield* Effect.succeed(socket)
+	}).pipe(
+		Effect.matchEffect({
+			onSuccess: socket => {
+				next()
+				return Effect.succeed(socket)
+			},
+			onFailure: error => {
+				logger.error(`Authentification failed on socket, ${error.message}`)
+				next(new Error('Forbidden.'))
+				return Effect.succeed(socket)
+			},
 		}),
 		Effect.runPromise
 	)

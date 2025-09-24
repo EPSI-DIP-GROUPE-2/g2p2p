@@ -2,8 +2,9 @@ import dotenv from 'dotenv'
 dotenv.config({ quiet: true }) // Load environment
 
 import 'config'
-import { assignRoutes } from './routes'
-import { logger, config, database, jwt, crypto } from '@src/utils'
+import { assignRoutes } from './/routes'
+import { assignSockets } from './/sockets'
+import { logger, config, database, jwt, crypto, socket } from '@src/utils'
 
 import { UserService } from '@src/services'
 import { Interceptors } from '@src/interceptors'
@@ -31,28 +32,18 @@ export async function bootstrap() {
 
 	assignRoutes(app)
 
-	// Création du serveur HTTP et Socket.IO
 	const httpServer = createServer(app)
-	const io = new SocketIOServer(httpServer, {
-		cors: { origin: '*' },
-	})
 
-	io.on('connection', socket => {
-		console.log('Client connecté :', socket.id)
-		// Exemple d'écoute d'événement
-		socket.on('message', data => {
-			console.log('Message reçu :', data)
-			io.emit('message', data)
-		})
-	})
+	const io = await socket.register(httpServer)
+	assignSockets(io)
 
-	return { app, httpServer }
+	return httpServer
 }
 
 /* istanbul ignore next */ // Ignore this block in test coverage
 if (require.main === module)
 	bootstrap()
-		.then(({ httpServer }) => {
+		.then(httpServer => {
 			const port = config.getSync<string>('http.port')
 			httpServer.listen(port, () => logger.info(`HTTP server started on 0.0.0.0:${port}`))
 		})
