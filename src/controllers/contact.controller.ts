@@ -12,7 +12,7 @@ export const findAllHandler = (req: Request, res: Response) =>
 			onSuccess: contacts => {
 				return Effect.succeed({
 					status: 200,
-					data: contacts,
+					data: contacts.map(({ username, identifier, id }) => ({ id, identifier, username })),
 				} as Json)
 			},
 			onFailure: error => {

@@ -20,7 +20,6 @@
 		{
 			"id": 1,
 			"username": "alice",
-			"public_key": "-----BEGIN PUBLIC KEY-----...",
 			"identifier": "abc123hash",
 			"createdAt": "2025-01-01T12:00:00.000Z",
 			"updatedAt": "2025-01-02T12:00:00.000Z"
@@ -28,7 +27,6 @@
 		{
 			"id": 2,
 			"username": "bob",
-			"public_key": "-----BEGIN PUBLIC KEY-----...",
 			"identifier": "def456hash",
 			"createdAt": "2025-01-03T12:00:00.000Z",
 			"updatedAt": "2025-01-04T12:00:00.000Z"
@@ -62,7 +60,7 @@
 **Notes:**
 
 - Uses `authMiddleware` to verify JWT.
-- Each contact object includes `id`, `username`, `public_key`, `identifier`, `createdAt`, and `updatedAt`.
+- Each contact object includes `id`, `username`, `identifier`, `createdAt`, and `updatedAt`.
 - Sensitive fields (if any) are omitted.
 - Returned data is scoped to the authenticated user’s accessible contacts.
 
