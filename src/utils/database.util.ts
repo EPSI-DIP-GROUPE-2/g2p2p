@@ -9,7 +9,7 @@ import { DatabaseHandler, FileHandler } from '@src/handlers'
 import * as FileUtils from './file.util'
 import { logger } from './logger.util'
 
-import * as Models from '@src/models'
+import { UserModel, ContactModel, MessageModel } from '@src/models'
 
 /**
  * A utility function to register models with a given Sequelize instance.
@@ -40,7 +40,7 @@ import * as Models from '@src/models'
 export const addModels = (sequelizeInstance: Sequelize) =>
 	Effect.try({
 		try: () => {
-			sequelizeInstance.addModels([Models.UserModel])
+			sequelizeInstance.addModels([UserModel, MessageModel, ContactModel])
 		},
 		catch: error => new DatabaseHandler.ModelError(error),
 	}).pipe(Effect.tap(() => logger.debug('Added database models.')))
@@ -104,10 +104,18 @@ export const auth = (sequelizeInstance: Sequelize) =>
  * ).then(console.log);
  */
 export const sync = (sequelizeInstance: Sequelize) =>
-	Effect.tryPromise({
-		try: () => sequelizeInstance.sync(),
-		catch: error => new DatabaseHandler.SyncError(error),
-	}).pipe(Effect.tap(() => logger.debug('Database synchronized')))
+	config.get<boolean>('database.sync').pipe(
+		Effect.flatMap(force =>
+			Effect.tryPromise({
+				try: () => {
+					logger.info('Synchronizing database.')
+					logger.warn('Using force synchronize results in a reset of the database.')
+					return sequelizeInstance.sync({ force })
+				},
+				catch: error => new DatabaseHandler.SyncError(error),
+			}).pipe(Effect.tap(() => logger.debug('Database synchronized')))
+		)
+	)
 
 /**
  * Establishes a connection to the SQLite database.

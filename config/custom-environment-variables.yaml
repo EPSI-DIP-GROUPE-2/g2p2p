@@ -4,10 +4,16 @@ logs:
 
 database:
   path: 'DATABASE_PATH'
+  sync: 'DATABASE_SYNC'
 
 http:
   port: HTTP_PORT
   proxies: HTTP_PROXIES
+
+encryption:
+  keys:
+    private: ENCRYPTION_PRIVATE
+    public: ENCRYPTION_PUBLIC
 
 jwt:
   secure: JWT_SECURE
