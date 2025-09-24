@@ -15,6 +15,7 @@ import { Effect } from 'effect/index'
 export type ContactInput = {
 	username: string
 	public_key: string
+	identifier: string
 }
 
 @Table({

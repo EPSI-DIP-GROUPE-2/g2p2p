@@ -1,7 +1,7 @@
 import path from 'path'
 import express, { Response, Request, Express } from 'express'
 import { validateMiddleware } from '@src/middlewares'
-import { AuthSchema, MessageSchema } from '@src/schemas'
+import { AuthSchema, ContactSchema, MessageSchema } from '@src/schemas'
 import { AuthController, ContactController, MessageController } from '@src/controllers'
 import authMiddleware from './middlewares/auth.middleware'
 
@@ -28,6 +28,12 @@ export const assignRoutes = (app: Express) => {
 
 	// Contacts controllers
 	app.get('/api/contacts', authMiddleware, ContactController.findAllHandler)
+	app.post(
+		'/api/contacts',
+		authMiddleware,
+		validateMiddleware(ContactSchema.create),
+		ContactController.createHandler
+	)
 
 	// Messages controllers
 	app.post(
