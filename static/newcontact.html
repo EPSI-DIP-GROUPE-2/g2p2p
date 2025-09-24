@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Echo — New Contact</title>
+  <link rel="stylesheet" href="/assets/dist/styles.css">
+  <link rel="icon" href="/assets/logo/logo.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <img src="/assets/logo/logo.svg" alt="" width="28" height="28">
+      <strong>Echo</strong>
+    </div>
+    <nav>
+      <a href="contacts.html" class="btn">Back</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="new-contact-container">
+      <div class="new-contact-card">
+        <h1>Add New Contact</h1>
+        <p class="new-contact-description">Add a new contact to start encrypted conversations</p>
+        
+        <form id="new-contact-form" class="new-contact-form">
+          <div class="field">
+            <label for="username">Username</label>
+            <input 
+              id="username" 
+              name="username" 
+              type="text" 
+              placeholder="Enter username" 
+              required
+              autocomplete="username"
+            >
+          </div>
+          
+          <div class="field">
+            <label for="public-key">Public Key</label>
+            <textarea 
+              id="public-key" 
+              name="public_key" 
+              placeholder="Paste the contact's public key here..." 
+              required
+              rows="6"
+            ></textarea>
+          </div>
+          
+          <div class="field">
+            <label for="identifier">Contact Identifier (optional)</label>
+            <input 
+              id="identifier" 
+              name="identifier" 
+              type="text" 
+              placeholder="Leave empty for auto-generation"
+              autocomplete="off"
+            >
+            <small class="field-help">This will be auto-generated from the public key if left empty</small>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='contacts.html'">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Add Contact
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer><small>© 2025 Echo</small></footer>
+  <script src="/assets/scripts/newcontact.js"></script>
+</body>
+</html>

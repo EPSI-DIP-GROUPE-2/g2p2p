@@ -24,6 +24,18 @@ export const assignRoutes = (app: Express) => {
 	app.get('/register', (_req: Request, res: Response) =>
 		res.sendFile(path.resolve(__dirname, '../static/register.html'))
 	)
+	app.get('/contacts', (_req: Request, res: Response) =>
+		res.sendFile(path.resolve(__dirname, '../static/contacts.html'))
+	)
+	app.get('/chat', (_req: Request, res: Response) =>
+		res.sendFile(path.resolve(__dirname, '../static/chat.html'))
+	)
+	app.get('/under-construction', (_req: Request, res: Response) =>
+		res.sendFile(path.resolve(__dirname, '../static/under-construction.html'))
+	)
+	app.get('/newcontact', (_req: Request, res: Response) =>
+		res.sendFile(path.resolve(__dirname, '../static/newcontact.html'))
+	)
 
 	// Auth controllers
 	app.post('/api/login', validateMiddleware(AuthSchema.login), AuthController.loginHandler)

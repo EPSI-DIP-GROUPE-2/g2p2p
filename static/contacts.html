@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Echo — Contacts</title>
+  <link rel="stylesheet" href="/assets/dist/styles.css">
+  <link rel="icon" href="/assets/logo/logo.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <img src="/assets/logo/logo.svg" alt="" width="28" height="28">
+      <strong>Echo</strong>
+    </div>
+    <nav>
+      <a href="home.html" class="btn">Home</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="contacts-container">
+      <h1>My Contacts</h1>
+      <div class="contact-actions">
+        <a href="newcontact.html" class="btn">+ New contact</a>
+      </div>
+      <ul class="contact-list">
+        <li>
+          <a class="contact-item" href="chat.html?user=alice">
+            <span class="contact-avatar">
+              <img src="/assets/logo/logo.svg" alt="A" width="36" height="36">
+            </span>
+            <span class="contact-info">
+              <span class="contact-name">Alice</span><br>
+              <span class="contact-lastmsg">Hey! Are you coming tonight?</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="contact-item" href="chat.html?user=bob">
+            <span class="contact-avatar">
+              <img src="/assets/logo/logo.svg" alt="B" width="36" height="36">
+            </span>
+            <span class="contact-info">
+              <span class="contact-name">Bob</span><br>
+              <span class="contact-lastmsg">See you at 10am tomorrow.</span>
+            </span>
+          </a>
+        </li>
+        <li>
+          <a class="contact-item" href="chat.html?user=carol">
+            <span class="contact-avatar">
+              <img src="/assets/logo/logo.svg" alt="C" width="36" height="36">
+            </span>
+            <span class="contact-info">
+              <span class="contact-name">Carol</span><br>
+              <span class="contact-lastmsg">Thanks for the doc!</span>
+            </span>
+          </a>
+        </li>
+        <!-- Ajoute d'autres contacts ici -->
+      </ul>
+    </div>
+  </main>
+
+  <footer><small>© 2025 Echo</small></footer>
+  <script src="/assets/scripts/contacts.js"></script>
+</body>
+</html>
