@@ -3,7 +3,7 @@ dotenv.config({ quiet: true }) // Load environment
 
 import 'config'
 import { assignRoutes } from './routes'
-import { logger, config, database, jwt } from '@src/utils'
+import { logger, config, database, jwt, crypto } from '@src/utils'
 
 import { UserService } from '@src/services'
 import { Interceptors } from '@src/interceptors'
@@ -18,6 +18,7 @@ export async function bootstrap() {
 	app.use(bodyParser.json())
 	app.use(cookieParser())
 
+	await crypto.loadEncryptionKeys()
 	await jwt.loadJWTKeys()
 	await database.connect()
 	await UserService.initializeUser()
