@@ -1,9 +1,8 @@
 import path from 'path'
 import express, { Response, Request, Express } from 'express'
-import { validateMiddleware } from '@src/middlewares'
+import { validateMiddleware, AuthMiddleware } from '@src/middlewares'
 import { AuthSchema, ContactSchema, MessageSchema } from '@src/schemas'
 import { AuthController, ContactController, MessageController } from '@src/controllers'
-import authMiddleware from './middlewares/auth.middleware'
 
 export const assignRoutes = (app: Express) => {
 	app.get('/health', (_req: Request, res: Response) => res.sendStatus(200))
@@ -21,16 +20,23 @@ export const assignRoutes = (app: Express) => {
 	app.get('/auth', (_req: Request, res: Response) =>
 		res.sendFile(path.resolve(__dirname, '../static/auth.html'))
 	)
+	app.get('/register', (_req: Request, res: Response) =>
+		res.sendFile(path.resolve(__dirname, '../static/register.html'))
+	)
+
+	app.get('/chat', (_req: Request, res: Response) =>
+		res.sendFile(path.resolve(__dirname, '../static/chat.html'))
+	)
 
 	// Auth controllers
 	app.post('/api/login', validateMiddleware(AuthSchema.login), AuthController.loginHandler)
-	app.get('/api/me', authMiddleware, AuthController.meHandler)
+	app.get('/api/me', AuthMiddleware.http, AuthController.meHandler)
 
 	// Contacts controllers
-	app.get('/api/contacts', authMiddleware, ContactController.findAllHandler)
+	app.get('/api/contacts', AuthMiddleware.http, ContactController.findAllHandler)
 	app.post(
 		'/api/contacts',
-		authMiddleware,
+		AuthMiddleware.http,
 		validateMiddleware(ContactSchema.create),
 		ContactController.createHandler
 	)
@@ -38,7 +44,7 @@ export const assignRoutes = (app: Express) => {
 	// Messages controllers
 	app.post(
 		'/api/messages',
-		authMiddleware,
+		AuthMiddleware.http,
 		validateMiddleware(MessageSchema.create),
 		MessageController.createHandler
 	)

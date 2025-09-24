@@ -2,24 +2,29 @@ import { Effect } from 'effect'
 import { MessageModel } from '@src/models'
 import { logger } from '@src/utils'
 import { DatabaseHandler } from '@src/handlers'
+import { socket } from '@src/utils'
 
-export const create = (o: {
+export const create = ({
+	from,
+	to,
+	content,
+}: {
 	from: MessageModel['from']
 	to: MessageModel['to']
 	content: MessageModel['content']
 }) =>
-	Effect.gen(function* () {
-		const { from, to, content } = o
-
-		return yield* Effect.tryPromise({
-			try: () => {
-				logger.debug('Creating message')
-				return MessageModel.create({
-					from,
-					to,
-					content,
-				})
-			},
-			catch: (error: unknown) => new DatabaseHandler.QueryError(error),
-		})
-	})
+	Effect.tryPromise({
+		try: () => {
+			logger.debug('Creating message')
+			return MessageModel.create({
+				from,
+				to,
+				content,
+			})
+		},
+		catch: (error: unknown) => new DatabaseHandler.QueryError(error),
+	}).pipe(
+		Effect.tap(({ to, from, content, timestamp, status }) =>
+			socket.emit('messages:append', { to, from, content, timestamp, status })
+		)
+	)

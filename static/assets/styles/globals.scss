@@ -78,6 +78,13 @@ a.btn:hover, button:hover {
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.4);
   width: min(380px, 90%);
+
+  .actions {
+    display: flex;
+    gap: .6rem;
+    justify-content: center;
+    margin-top: .5rem;
+  }
 }
 
 .card h1 {
@@ -104,4 +111,68 @@ input {
 }
 input::placeholder {
   color: #9fa9a3;
+}
+
+/* ----- Chat page ----- */
+
+// ...existing code...
+
+.chat-container {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: 60vh;
+  background: #23272a;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  padding: 1.5rem 1rem;
+  justify-content: flex-end;
+}
+
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.bubble {
+  display: inline-block;
+  max-width: 75%;
+  padding: 0.7em 1.1em;
+  border-radius: 18px;
+  font-size: 1rem;
+  word-break: break-word;
+  background: #3a3f44;
+  color: #e0f7da;
+}
+
+.bubble.sent {
+  align-self: flex-end;
+  background: #66bb6a;
+  color: #23272a;
+}
+
+.bubble.received {
+  align-self: flex-start;
+  background: #3a3f44;
+  color: #e0f7da;
+}
+
+#chat-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#chat-form input[type="text"] {
+  flex: 1;
+  padding: 0.7em;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #2c2f33;
+  color: #e0f7da;
 }
