@@ -30,22 +30,22 @@ export async function bootstrap() {
 
 	assignRoutes(app)
 
-	    // Création du serveur HTTP et Socket.IO
-    const httpServer = createServer(app)
-    const io = new SocketIOServer(httpServer, {
-        cors: { origin: "*" }
-    })
+	// Création du serveur HTTP et Socket.IO
+	const httpServer = createServer(app)
+	const io = new SocketIOServer(httpServer, {
+		cors: { origin: '*' },
+	})
 
-    io.on('connection', (socket) => {
-        console.log('Client connecté :', socket.id)
-        // Exemple d'écoute d'événement
-        socket.on('message', (data) => {
-            console.log('Message reçu :', data)
-            io.emit('message', data)
-        })
-    })
+	io.on('connection', socket => {
+		console.log('Client connecté :', socket.id)
+		// Exemple d'écoute d'événement
+		socket.on('message', data => {
+			console.log('Message reçu :', data)
+			io.emit('message', data)
+		})
+	})
 
-    return { app, httpServer }
+	return { app, httpServer }
 }
 
 /* istanbul ignore next */ // Ignore this block in test coverage
