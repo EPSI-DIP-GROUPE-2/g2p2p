@@ -1,6 +1,6 @@
 import { Effect } from 'effect'
 import { Request, Response } from 'express'
-import { logger, jwt } from '@src/utils'
+import { logger, crypto } from '@src/utils'
 import { Json } from '@src/types/response.type'
 import { MessageModel } from '@src/models'
 import { MessageService } from '@src/services'
@@ -12,9 +12,7 @@ export const createHandler = (
 	res: Response
 ) =>
 	Effect.gen(function* () {
-		console.log(req.body)
-
-		const { publicKey } = yield* jwt.keys
+		const { publicKey } = yield* crypto.keys
 
 		return yield* MessageService.create({
 			from: publicKey,
@@ -27,6 +25,7 @@ export const createHandler = (
 				status: 200,
 				data: {
 					id: message.id,
+					to: message.to,
 					status: message.status,
 					content: message.content,
 					timestamp: message.timestamp,
