@@ -95,3 +95,15 @@ export const send = (message: MessageModel) =>
 			)
 		)
 	)
+
+export const receive = (input: PeerMessage) =>
+	crypto.keys.pipe(
+		Effect.map(({ privateKey }) => crypto.decryptString(privateKey, input.content)),
+		Effect.flatMap(decrypted =>
+			create({
+				from: input.from,
+				to: input.to,
+				content: decrypted,
+			})
+		)
+	)
