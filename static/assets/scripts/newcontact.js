@@ -40,6 +40,87 @@ function validateForm(formData) {
   return true;
 }
 
+//  Gestion du sélecteur de méthode
+function initMethodSelector() {
+  const methodBtns = document.querySelectorAll('.method-btn');
+  const qrSection = document.getElementById('qr-section');
+  const manualSection = document.getElementById('manual-section');
+  const publicKeyField = document.getElementById('public-key');
+
+  methodBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const method = btn.dataset.method;
+      
+      // Mettre à jour les boutons
+      methodBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      
+      // Afficher/masquer les sections
+      if (method === 'qr') {
+        qrSection.classList.remove('hidden');
+        manualSection.classList.add('hidden');
+        publicKeyField.removeAttribute('required');
+      } else {
+        qrSection.classList.add('hidden');
+        manualSection.classList.remove('hidden');
+        publicKeyField.setAttribute('required', 'required');
+      }
+    });
+  });
+
+  // Gérer le scan QR (pour l'instant, rediriger vers under-construction pour le moment)
+  const qrScanBtn = document.querySelector('.qr-scan-btn');
+  if (qrScanBtn) {
+    qrScanBtn.addEventListener('click', () => {
+      window.location.href = 'under-construction.html';
+    });
+  }
+}
+
+
+function initDropdown() {
+  const dropdownToggle = document.getElementById('key-toggle');
+  const dropdownContent = document.getElementById('key-dropdown');
+  const dropdownContainer = dropdownToggle.closest('.dropdown-container');
+  const dropdownText = dropdownToggle.querySelector('.dropdown-text');
+  const publicKeyField = document.getElementById('public-key');
+
+  dropdownToggle.addEventListener('click', () => {
+    const isOpen = dropdownContent.classList.contains('open');
+    
+    if (isOpen) {
+      // Fermer
+      dropdownContent.classList.remove('open');
+      dropdownContainer.classList.remove('open');
+      dropdownText.textContent = 'Click to add public key';
+    } else {
+      // Ouvrir
+      dropdownContent.classList.add('open');
+      dropdownContainer.classList.add('open');
+      dropdownText.textContent = 'Public key (click to hide)';
+      publicKeyField.focus();
+    }
+  });
+
+  // Fermer en cliquant à l'extérieur
+  document.addEventListener('click', (e) => {
+    if (!dropdownContainer.contains(e.target)) {
+      dropdownContent.classList.remove('open');
+      dropdownContainer.classList.remove('open');
+      dropdownText.textContent = 'Click to add public key';
+    }
+  });
+
+  // Mettre à jour le texte si une clé est déjà présente
+  publicKeyField.addEventListener('input', () => {
+    if (publicKeyField.value.trim()) {
+      dropdownText.textContent = 'Public key added ✓';
+    } else {
+      dropdownText.textContent = 'Click to add public key';
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('new-contact-form');
   
@@ -51,7 +132,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const contactData = {
         username: formData.get('username').trim(),
         public_key: formData.get('public_key').trim()
-        // Pas d'identifier - il est auto-généré côté serveur
       };
       
       if (validateForm(contactData)) {
@@ -72,19 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
   
-  // Afficher un aperçu de l'identifiant qui sera généré
-  const publicKeyField = document.getElementById('public-key');
-  const identifierField = document.getElementById('identifier');
-  
-  if (publicKeyField && identifierField) {
-    publicKeyField.addEventListener('input', () => {
-      const publicKey = publicKeyField.value.trim();
-      if (publicKey) {
-        // Générer un aperçu de l'identifiant (même logique que le serveur)
-        const hash = btoa(publicKey).substring(0, 16);
-        identifierField.placeholder = `Auto-generated: ${hash}`;
-        identifierField.value = ''; // Vider le champ car il sera généré côté serveur
-      }
-    });
-  }
+  // Initialiser les deux fonctionnalités
+  initMethodSelector();
+  initDropdown();
 });

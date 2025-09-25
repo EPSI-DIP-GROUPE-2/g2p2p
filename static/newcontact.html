@@ -36,28 +36,45 @@
               autocomplete="username"
             >
           </div>
-          
+
           <div class="field">
+            <label>Add Contact Method</label>
+            <div class="method-selector">
+              <button type="button" class="method-btn active" data-method="qr">
+                📱 Scan QR Code
+              </button>
+              <button type="button" class="method-btn" data-method="manual">
+                Enter Public Key
+              </button>
+            </div>
+          </div>
+
+          <!-- Section QR Code -->
+          <div class="field method-section" id="qr-section">
+            <label>Scan QR Code</label>
+            <div class="qr-container">
+              <div class="qr-placeholder">
+                <div class="qr-icon">📱</div>
+                <p>Click to open camera and scan the contact's QR code</p>
+              </div>
+              <button type="button" class="btn btn-primary qr-scan-btn">
+                Open Camera
+              </button>
+            </div>
+          </div>
+
+          <!-- Section Clé publique -->
+          <div class="field method-section hidden" id="manual-section">
             <label for="public-key">Public Key</label>
             <textarea 
               id="public-key" 
               name="public_key" 
               placeholder="Paste the contact's public key here..." 
-              required
               rows="6"
             ></textarea>
-          </div>
-          
-          <div class="field">
-            <label for="identifier">Contact Identifier (optional)</label>
-            <input 
-              id="identifier" 
-              name="identifier" 
-              type="text" 
-              placeholder="Leave empty for auto-generation"
-              autocomplete="off"
-            >
-            <small class="field-help">This will be auto-generated from the public key if left empty</small>
+            <small class="field-help">
+              You can find this in the contact's profile or settings
+            </small>
           </div>
           
           <div class="form-actions">
