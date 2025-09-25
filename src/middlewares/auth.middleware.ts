@@ -1,7 +1,7 @@
 import { Data, Effect } from 'effect'
 import { Request, Response, NextFunction } from 'express'
 import type { Json } from '../types/response.type'
-import { logger, jwt } from '@src/utils'
+import { logger, jwt, config } from '@src/utils'
 import { ResponseHandler } from '@src/handlers'
 import { AccessToken, SocketUser } from '@src/types/token.type'
 import { ExtendedError, Socket } from 'socket.io'
@@ -13,8 +13,9 @@ export class RedirectError extends Data.TaggedError('Redirect') {}
 
 export const http = (req: Request & { user?: AccessToken }, res: Response, next: NextFunction) =>
 	Effect.gen(function* () {
-		if (req.cookies['accessToken']) {
-			const token = yield* jwt.verify(req.cookies['accessToken'] as string)
+		const cookieName = yield* config.get<string>('jwt.cookie')
+		if (req.cookies[cookieName]) {
+			const token = yield* jwt.verify(req.cookies[cookieName] as string)
 
 			req.user = token
 
@@ -57,9 +58,10 @@ export const socket = (socket: Socket, next: (err?: ExtendedError) => void) =>
 			return yield* Effect.fail(new AuthError())
 		}
 
-		// // Parse cookies
+		// Parse cookies
+		const cookieName = yield* config.get<string>('jwt.cookie')
 		const cookies = parseCookies(cookieHeader)
-		const token = cookies.accessToken
+		const token = cookies[cookieName]
 		if (!token) return yield* Effect.fail(new AuthError())
 
 		const verified = yield* jwt.verify(token)

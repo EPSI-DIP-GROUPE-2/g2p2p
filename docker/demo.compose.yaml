@@ -6,25 +6,35 @@ networks:
 services:
   peer1:
     container_name: echo-peer-1
+    user: '1000'
     build:
       context: ../
       dockerfile: Dockerfile
     environment:
       PEER_PATH: http://peer1:3000
+      JWT_COOKIE: peer-1-accessToken
     ports:
       - '3001:3000'
+    volumes:
+      - ./cdata/peer1/var:/var/opt/echo
+      - ./cdata/peer1/etc:/etc/opt/echo
     networks:
       - virt-lan
 
   peer2:
     container_name: echo-peer-2
+    user: '1000'
     build:
       context: ../
       dockerfile: Dockerfile
     environment:
       PEER_PATH: http://peer2:3000
+      JWT_COOKIE: peer-2-accessToken
     ports:
       - '3002:3000'
+    volumes:
+      - ./cdata/peer2/var:/var/opt/echo
+      - ./cdata/peer2/etc:/etc/opt/echo
     networks:
       - virt-lan
     depends_on:
@@ -32,13 +42,18 @@ services:
 
   peer3:
     container_name: echo-peer-3
+    user: '1000'
     build:
       context: ../
       dockerfile: Dockerfile
     environment:
       PEER_PATH: http://peer3:3000
+      JWT_COOKIE: peer-3-accessToken
     ports:
       - '3003:3000'
+    volumes:
+      - ./cdata/peer3/var:/var/opt/echo
+      - ./cdata/peer3/etc:/etc/opt/echo
     networks:
       - virt-lan
     depends_on:
