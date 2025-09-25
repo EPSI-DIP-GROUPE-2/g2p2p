@@ -1,0 +1,45 @@
+---
+networks:
+  virt-lan:
+    external: false
+
+services:
+  peer1:
+    container_name: echo-peer-1
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    environment:
+      PEER_PATH: http://peer1:3000
+    ports:
+      - '3001:3000'
+    networks:
+      - virt-lan
+
+  peer2:
+    container_name: echo-peer-2
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    environment:
+      PEER_PATH: http://peer2:3000
+    ports:
+      - '3002:3000'
+    networks:
+      - virt-lan
+    depends_on:
+      - peer1
+
+  peer3:
+    container_name: echo-peer-3
+    build:
+      context: ../
+      dockerfile: Dockerfile
+    environment:
+      PEER_PATH: http://peer3:3000
+    ports:
+      - '3003:3000'
+    networks:
+      - virt-lan
+    depends_on:
+      - peer2

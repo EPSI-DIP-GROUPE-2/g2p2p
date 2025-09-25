@@ -89,6 +89,8 @@ export const keys = Effect.gen(function* () {
 	return { privateKey: yield* file.read(privateKey), publicKey: yield* file.read(publicKey) }
 })
 
+export const identifier = keys.pipe(Effect.flatMap(({ publicKey }) => hashString(publicKey)))
+
 export const loadEncryptionKeys = () =>
 	Effect.all([
 		config.get<string>('encryption.keys.private'),

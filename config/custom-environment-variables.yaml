@@ -21,3 +21,6 @@ jwt:
   keys:
     private: JWT_KEY_PRIVATE
     public: JWT_KEY_PUBLIC
+
+peer:
+  path: PEER_PATH
