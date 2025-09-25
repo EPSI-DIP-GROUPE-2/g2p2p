@@ -41,7 +41,7 @@ export const findOne = (identifier: string) =>
 		catch: (error: unknown) => new DatabaseHandler.QueryError(error),
 	}).pipe(
 		Effect.flatMap(result => {
-			if (!result) return new DatabaseHandler.NotFound(DatabaseHandler.Models.USER)
+			if (!result) return new DatabaseHandler.NotFound(DatabaseHandler.Models.CONTACT)
 			return Effect.succeed(result)
 		})
 	)
