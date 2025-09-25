@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Echo — New Contact</title>
+  <link rel="stylesheet" href="/assets/dist/styles.css">
+  <link rel="icon" href="/assets/logo/logo.svg" type="image/svg+xml">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <img src="/assets/logo/logo.svg" alt="" width="28" height="28">
+      <strong>Echo</strong>
+    </div>
+    <nav>
+      <a href="contacts.html" class="btn">Back</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="new-contact-container">
+      <div class="new-contact-card">
+        <h1>Add New Contact</h1>
+        <p class="new-contact-description">Add a new contact to start encrypted conversations</p>
+        
+        <form id="new-contact-form" class="new-contact-form">
+          <div class="field">
+            <label for="username">Username</label>
+            <input 
+              id="username" 
+              name="username" 
+              type="text" 
+              placeholder="Enter username" 
+              required
+              autocomplete="username"
+            >
+          </div>
+
+          <div class="field">
+            <label>Add Contact Method</label>
+            <div class="method-selector">
+              <button type="button" class="method-btn active" data-method="qr">
+                📱 Scan QR Code
+              </button>
+              <button type="button" class="method-btn" data-method="manual">
+                Enter Public Key
+              </button>
+            </div>
+          </div>
+
+          <!-- Section QR Code -->
+          <div class="field method-section" id="qr-section">
+            <label>Scan QR Code</label>
+            <div class="qr-container">
+              <div class="qr-placeholder">
+                <div class="qr-icon">📱</div>
+                <p>Click to open camera and scan the contact's QR code</p>
+              </div>
+              <button type="button" class="btn btn-primary qr-scan-btn">
+                Open Camera
+              </button>
+            </div>
+          </div>
+
+          <!-- Section Clé publique -->
+          <div class="field method-section hidden" id="manual-section">
+            <label for="public-key">Public Key</label>
+            <textarea 
+              id="public-key" 
+              name="public_key" 
+              placeholder="Paste the contact's public key here..." 
+              rows="6"
+            ></textarea>
+            <small class="field-help">
+              You can find this in the contact's profile or settings
+            </small>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" onclick="window.location.href='contacts.html'">
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              Add Contact
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer><small>© 2025 Echo</small></footer>
+  <script src="/assets/scripts/newcontact.js"></script>
+</body>
+</html>
