@@ -29,3 +29,19 @@ export const create = ({ username, public_key }: ContactSchema.Create['body']) =
 		),
 		Effect.tap(contact => socket.emit('contacts:append', contact))
 	)
+
+export const findOne = (identifier: string) =>
+	Effect.tryPromise({
+		try: () =>
+			ContactModel.findOne({
+				where: {
+					identifier,
+				},
+			}),
+		catch: (error: unknown) => new DatabaseHandler.QueryError(error),
+	}).pipe(
+		Effect.flatMap(result => {
+			if (!result) return new DatabaseHandler.NotFound(DatabaseHandler.Models.USER)
+			return Effect.succeed(result)
+		})
+	)

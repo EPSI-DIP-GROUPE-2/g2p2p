@@ -61,5 +61,7 @@ export const assignRoutes = (app: Express) => {
 		MessageController.createHandler
 	)
 
+	app.post('/api/messages/receive', MessageController.receiveHandler)
+
 	app.get('/api/messages', AuthMiddleware.http, MessageController.listHandler)
 }

@@ -26,6 +26,7 @@ export const createHandler = (
 				data: {
 					id: message.id,
 					to: message.to,
+					from: message.from,
 					status: message.status,
 					content: message.content,
 					timestamp: message.timestamp,
@@ -67,3 +68,8 @@ export const listHandler = (_req: Request, res: Response) =>
 		Effect.andThen(response => res.status(response.status).json(response)),
 		Effect.runPromise
 	)
+
+export const receiveHandler = (req: Request, res: Response) => {
+	console.log(req.body)
+	res.sendStatus(200)
+}
