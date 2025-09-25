@@ -36,4 +36,6 @@ RUN chown -R node:node /app && chmod -R 700 /app && mkdir /etc/opt/echo -p && mk
 USER node
 
 EXPOSE 3000
+VOLUME /etc/opt/echo
+VOLUME /var/opt/echo
 ENTRYPOINT ["node", "/app/dist/index.js"]

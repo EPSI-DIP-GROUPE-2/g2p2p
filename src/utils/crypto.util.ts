@@ -169,3 +169,5 @@ export const verifyString = (publicKey: string, data: string, signature: string)
 	verify.end()
 	return verify.verify(publicKey, signature, 'base64')
 }
+
+export const trimKey = (key: string) => key.replace(/\n$/, '').replace(/^\n/, '').trim()

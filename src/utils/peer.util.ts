@@ -31,7 +31,10 @@ export const registerDeamon = (http: Server) =>
 				const me = yield* config.get<string>('peer.path')
 				logger.info(`Reaching peers as ${me}`)
 
-				const { publicKey } = yield* crypto.keys
+				const publicKey = yield* crypto.keys.pipe(
+					Effect.map(({ publicKey }) => publicKey),
+					Effect.map(crypto.trimKey)
+				)
 				const identifier = yield* crypto.identifier
 
 				gun.get('peers').set({
@@ -42,8 +45,6 @@ export const registerDeamon = (http: Server) =>
 
 				yield* wait
 
-				const peers: Peer[] = []
-
 				gun
 					.get('peers')
 					.map()
@@ -51,7 +52,11 @@ export const registerDeamon = (http: Server) =>
 						let p: Peer = peer as Peer
 						if (!peers.find(e => e.identifier === p.identifier) && p.identifier !== identifier) {
 							gun.opt({ peers: [p.path] })
-							peers.push(p)
+							peers.push({
+								path: p.path,
+								identifier: p.identifier,
+								publicKey: crypto.trimKey(p.publicKey),
+							})
 							logger.info(`Reached ${p.identifier} at ${p.path}`)
 						}
 					})

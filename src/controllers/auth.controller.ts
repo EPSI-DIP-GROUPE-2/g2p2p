@@ -25,7 +25,9 @@ export const loginHandler = (
 			username: user.username,
 		} as AccessToken)
 
-		res.cookie('accessToken', token, {
+		const cookieName = yield* config.get<string>('jwt.cookie')
+
+		res.cookie(cookieName, token, {
 			httpOnly: true,
 			sameSite: 'strict',
 			secure: yield* config.get<boolean>('jwt.secure'),
