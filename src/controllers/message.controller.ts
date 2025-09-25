@@ -41,3 +41,29 @@ export const createHandler = (
 		Effect.andThen(response => res.status(response.status).json(response)),
 		Effect.runPromise
 	)
+
+export const listHandler = (req: Request, res: Response) =>
+	MessageService.findAll().pipe(
+		Effect.flatMap(messages =>
+			Effect.succeed({
+				status: 200,
+				data: messages.map(
+					message =>
+						({
+							id: message.id,
+							to: message.to,
+							status: message.status,
+							content: message.content,
+							timestamp: message.timestamp,
+						}) as Partial<MessageModel>
+				),
+			} as Json)
+		),
+		Effect.catchAll(error => {
+			logger.error(`${error.title} ${error.message}`)
+
+			return Effect.succeed({ ...ResponseHandler.UnexpectedErrorResponse, message: error.message })
+		}),
+		Effect.andThen(response => res.status(response.status).json(response)),
+		Effect.runPromise
+	)

@@ -28,3 +28,12 @@ export const create = ({
 			socket.emit('messages:append', { to, from, content, timestamp, status })
 		)
 	)
+
+export const findAll = () =>
+	Effect.tryPromise({
+		try: () => {
+			logger.debug('Listing messages')
+			return MessageModel.findAll({ order: [['timestamp', 'DESC']] })
+		},
+		catch: (error: unknown) => new DatabaseHandler.QueryError(error),
+	})

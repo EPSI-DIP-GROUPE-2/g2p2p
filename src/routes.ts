@@ -48,4 +48,6 @@ export const assignRoutes = (app: Express) => {
 		validateMiddleware(MessageSchema.create),
 		MessageController.createHandler
 	)
+
+	app.get('/api/messages', AuthMiddleware.http, MessageController.listHandler)
 }
