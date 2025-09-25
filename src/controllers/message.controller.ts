@@ -12,10 +12,10 @@ export const createHandler = (
 	res: Response
 ) =>
 	Effect.gen(function* () {
-		const { publicKey } = yield* crypto.keys
+		const identifier = yield* crypto.identifier
 
 		return yield* MessageService.create({
-			from: publicKey,
+			from: identifier,
 			to: req.body.to,
 			content: req.body.content,
 		})
@@ -42,7 +42,7 @@ export const createHandler = (
 		Effect.runPromise
 	)
 
-export const listHandler = (req: Request, res: Response) =>
+export const listHandler = (_req: Request, res: Response) =>
 	MessageService.findAll().pipe(
 		Effect.flatMap(messages =>
 			Effect.succeed({

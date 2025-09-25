@@ -42,8 +42,6 @@ export const registerDeamon = (http: Server) =>
 
 				yield* wait
 
-				const peers: Peer[] = []
-
 				gun
 					.get('peers')
 					.map()
@@ -51,7 +49,11 @@ export const registerDeamon = (http: Server) =>
 						let p: Peer = peer as Peer
 						if (!peers.find(e => e.identifier === p.identifier) && p.identifier !== identifier) {
 							gun.opt({ peers: [p.path] })
-							peers.push(p)
+							peers.push({
+								path: p.path,
+								identifier: p.identifier,
+								publicKey: p.publicKey,
+							})
 							logger.info(`Reached ${p.identifier} at ${p.path}`)
 						}
 					})

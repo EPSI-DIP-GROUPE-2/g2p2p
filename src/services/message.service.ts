@@ -1,16 +1,16 @@
 import { Effect } from 'effect'
-import { MessageModel } from '@src/models'
+import { ContactModel, MessageModel } from '@src/models'
 import { logger } from '@src/utils'
 import { DatabaseHandler } from '@src/handlers'
-import { socket } from '@src/utils'
+import { socket, peer } from '@src/utils'
 
 export const create = ({
 	from,
 	to,
 	content,
 }: {
-	from: MessageModel['from']
-	to: MessageModel['to']
+	from: ContactModel['identifier']
+	to: ContactModel['identifier']
 	content: MessageModel['content']
 }) =>
 	Effect.tryPromise({
