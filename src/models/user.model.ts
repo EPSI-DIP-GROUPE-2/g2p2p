@@ -11,10 +11,12 @@ import {
 } from 'sequelize-typescript'
 import { crypto } from '@src/utils'
 import { Effect } from 'effect/index'
+import { ContactModel } from './contact.model'
 
 export type UserInput = {
 	username: string
 	password: string
+	identifier: ContactModel['identifier']
 }
 
 @Table({
@@ -34,6 +36,12 @@ export class UserModel extends Model<UserModel, UserInput> {
 		allowNull: false,
 	})
 	username!: string
+
+	@Column({
+		type: DataType.STRING,
+		allowNull: false,
+	})
+	identifier!: string
 
 	@Unique
 	@Column({

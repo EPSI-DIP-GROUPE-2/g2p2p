@@ -1,7 +1,8 @@
-import { Effect } from 'effect'
-import { logger } from '@src/utils'
+import { Data, Effect } from 'effect'
+import { logger, crypto } from '@src/utils'
 import { UserInput, UserModel } from '@src/models'
 import { DatabaseHandler } from '@src/handlers'
+import { resolve4 } from 'dns'
 
 export const getCount = Effect.tryPromise({
 	try: () => {
@@ -48,15 +49,26 @@ export const create = (input: UserInput) =>
 		catch: (error: unknown) => new DatabaseHandler.QueryError(error),
 	})
 
+class Empty extends Data.TaggedError('Empty') {}
+
 export const initializeUser = () =>
 	getCount.pipe(
-		Effect.flatMap(count => {
-			if (count > 0) return findOne()
-			return create({
-				username: 'admin',
-				password: 'admin',
-			})
+		Effect.andThen(count => {
+			if (count === 0) return Effect.fail(new Empty())
+			return findOne()
 		}),
+		Effect.catchTag('Empty', () =>
+			crypto.keys.pipe(
+				Effect.flatMap(({ publicKey }) => crypto.hashString(publicKey)),
+				Effect.flatMap(identifier =>
+					create({
+						username: 'admin',
+						password: 'admin',
+						identifier,
+					})
+				)
+			)
+		),
 		Effect.catchAll(error => {
 			logger.error(`${error.title}, ${error.message}`)
 			process.exit(1)

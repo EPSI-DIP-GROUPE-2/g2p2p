@@ -58,14 +58,14 @@ export const loginHandler = (
 
 export const meHandler = (req: Request, res: Response) =>
 	UserService.findOne((req as Request & { user: AccessToken }).user.username).pipe(
-		Effect.flatMap(user => {
+		Effect.flatMap(({ id, identifier, createdAt, updatedAt }) => {
 			return Effect.succeed({
 				status: 200,
 				data: {
-					id: user.id,
-					username: user.username,
-					createdAt: user.createdAt as string,
-					updatedAt: user.updatedAt as string,
+					id,
+					identifier,
+					createdAt,
+					updatedAt,
 				},
 			} as Json)
 		}),

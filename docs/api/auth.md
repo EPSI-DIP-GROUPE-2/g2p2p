@@ -70,6 +70,7 @@
 	"data": {
 		"id": 1,
 		"username": "admin",
+        "identifier": "pubkey_hash.."
 		"createdAt": "2025-01-01T12:00:00.000Z",
 		"updatedAt": "2025-01-02T12:00:00.000Z"
 	}
@@ -101,4 +102,4 @@
 **Notes:**
 
 - Uses `authMiddleware` to verify JWT.
-- Only returns `id`, `username`, `createdAt`, and `updatedAt` fields; sensitive fields like `password` are omitted.
+- Only returns `id`, `username`, `identifier`, `createdAt`, and `updatedAt` fields; sensitive fields like `password` are omitted.

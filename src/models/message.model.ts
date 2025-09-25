@@ -9,10 +9,11 @@ import {
 } from 'sequelize-typescript'
 import { NOW } from 'sequelize'
 import { MessageStatus } from '@src/types/message.type'
+import { ContactModel } from './contact.model'
 
 export type MessageInput = {
-	from: string
-	to: string
+	from: ContactModel['identifier']
+	to: ContactModel['identifier']
 	content: string
 }
 
