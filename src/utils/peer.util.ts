@@ -31,7 +31,10 @@ export const registerDeamon = (http: Server) =>
 				const me = yield* config.get<string>('peer.path')
 				logger.info(`Reaching peers as ${me}`)
 
-				const { publicKey } = yield* crypto.keys
+				const publicKey = yield* crypto.keys.pipe(
+					Effect.map(({ publicKey }) => publicKey),
+					Effect.map(crypto.trimKey)
+				)
 				const identifier = yield* crypto.identifier
 
 				gun.get('peers').set({
@@ -52,7 +55,7 @@ export const registerDeamon = (http: Server) =>
 							peers.push({
 								path: p.path,
 								identifier: p.identifier,
-								publicKey: p.publicKey,
+								publicKey: crypto.trimKey(p.publicKey),
 							})
 							logger.info(`Reached ${p.identifier} at ${p.path}`)
 						}
