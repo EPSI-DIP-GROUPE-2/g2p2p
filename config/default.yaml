@@ -22,3 +22,6 @@ jwt:
   keys:
     private: /etc/opt/echo/jwt/private.key
     public: /etc/opt/echo/jwt/public.key
+
+peer:
+  path: http://localhost
