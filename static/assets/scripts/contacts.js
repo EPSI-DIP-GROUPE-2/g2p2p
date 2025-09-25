@@ -13,7 +13,7 @@ async function fetchContacts() {
   data.data.forEach(contact => {
     const li = document.createElement('li');
     li.innerHTML = `
-      <a class="contact-item" href="chat.html?user=${encodeURIComponent(contact.username)}">
+      <a class="contact-item" href="chat.html?contact=${encodeURIComponent(contact.username)}">
         <span class="contact-avatar">
           <img src="/assets/logo/logo.svg" alt="${contact.username[0].toUpperCase()}" width="36" height="36">
         </span>
