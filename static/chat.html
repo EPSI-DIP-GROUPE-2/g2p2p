@@ -31,32 +31,6 @@
   <footer><small>© 2025 Echo</small></footer>
 
   <script src="/socket.io/socket.io.js"></script>
-  <script>
-    const socket = io();
-    const form = document.getElementById('chat-form');
-    const input = document.getElementById('msg');
-    const messages = document.getElementById('messages');
-
-    // Pour la démo, on simule un "user" local
-    const username = 'me-' + Math.floor(Math.random() * 10000);
-
-    // Affiche les messages reçus
-    socket.on('message', data => {
-      const div = document.createElement('div');
-      div.className = 'bubble ' + (data.user === username ? 'sent' : 'received');
-      div.textContent = data.text;
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
-    });
-
-    // Envoie le message au serveur
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const text = input.value.trim();
-      if (!text) return;
-      socket.emit('message', { user: username, text });
-      input.value = '';
-    });
-  </script>
+  <script src="/assets/scripts/chat.js"></script>
 </body>
 </html>
