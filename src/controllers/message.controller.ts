@@ -20,6 +20,7 @@ export const createHandler = (
 			content: req.body.content,
 		})
 	}).pipe(
+		Effect.tap(MessageService.send),
 		Effect.flatMap(message =>
 			Effect.succeed({
 				status: 200,
@@ -69,7 +70,42 @@ export const listHandler = (_req: Request, res: Response) =>
 		Effect.runPromise
 	)
 
-export const receiveHandler = (req: Request, res: Response) => {
-	console.log(req.body)
-	res.sendStatus(200)
-}
+export const receiveHandler = (
+	req: Request<unknown, unknown, MessageSchema.Receive['body']>,
+	res: Response
+) =>
+	Effect.gen(function* () {
+		const identifier = yield* crypto.identifier
+		const { privateKey } = yield* crypto.keys
+		const decrypted = crypto.decryptString(privateKey, req.body.content)
+
+		yield* MessageService.create({
+			from: req.body.from,
+			to: identifier,
+			content: decrypted,
+		})
+
+		res.sendStatus(200)
+	}).pipe(
+		// Effect.flatMap(message =>
+		// 	Effect.succeed({
+		// 		status: 200,
+		// 		data: {
+		// 			id: message.id,
+		// 			to: message.to,
+		// 			from: message.from,
+		// 			status: message.status,
+		// 			content: message.content,
+		// 			timestamp: message.timestamp,
+		// 		} as Partial<MessageModel>,
+		// 	} as Json)
+		// ),
+		// Effect.catchAll(error => {
+		// 	return Effect.fail(error)
+		// 	logger.error(`${error.title} ${error.message}`)
+
+		// 	return Effect.succeed({ ...ResponseHandler.UnexpectedErrorResponse, message: error.message })
+		// }),
+		// Effect.andThen(response => res.status(response.status).json(response)),
+		Effect.runPromise
+	)

@@ -28,8 +28,7 @@ export const create = ({
 	}).pipe(
 		Effect.tap(({ to, from, content, timestamp, status }) =>
 			socket.emit('messages:append', { to, from, content, timestamp, status })
-		),
-		Effect.tap(send)
+		)
 	)
 
 export const findAll = () =>
