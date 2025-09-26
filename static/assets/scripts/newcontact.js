@@ -32,11 +32,6 @@ function validateForm(formData) {
     return false;
   }
   
-  if (!public_key || public_key.trim().length < 10) {
-    alert('La clé publique semble invalide');
-    return false;
-  }
-  
   return true;
 }
 
@@ -63,7 +58,7 @@ function initMethodSelector() {
       } else {
         qrSection.classList.add('hidden');
         manualSection.classList.remove('hidden');
-        publicKeyField.setAttribute('required', 'required');
+        // publicKeyField.setAttribute('required', 'required');
       }
     });
   });
@@ -83,7 +78,6 @@ function initDropdown() {
   const dropdownContent = document.getElementById('key-dropdown');
   const dropdownContainer = dropdownToggle.closest('.dropdown-container');
   const dropdownText = dropdownToggle.querySelector('.dropdown-text');
-  const publicKeyField = document.getElementById('public-key');
 
   dropdownToggle.addEventListener('click', () => {
     const isOpen = dropdownContent.classList.contains('open');
@@ -98,7 +92,6 @@ function initDropdown() {
       dropdownContent.classList.add('open');
       dropdownContainer.classList.add('open');
       dropdownText.textContent = 'Public key (click to hide)';
-      publicKeyField.focus();
     }
   });
 
@@ -107,15 +100,6 @@ function initDropdown() {
     if (!dropdownContainer.contains(e.target)) {
       dropdownContent.classList.remove('open');
       dropdownContainer.classList.remove('open');
-      dropdownText.textContent = 'Click to add public key';
-    }
-  });
-
-  // Mettre à jour le texte si une clé est déjà présente
-  publicKeyField.addEventListener('input', () => {
-    if (publicKeyField.value.trim()) {
-      dropdownText.textContent = 'Public key added ✓';
-    } else {
       dropdownText.textContent = 'Click to add public key';
     }
   });
@@ -129,9 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       
       const formData = new FormData(form);
+			const public_key = await formData.get('public_key').text()
       const contactData = {
         username: formData.get('username').trim(),
-        public_key: formData.get('public_key').trim()
+        public_key
       };
       
       if (validateForm(contactData)) {

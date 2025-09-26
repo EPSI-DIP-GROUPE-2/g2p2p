@@ -4,7 +4,7 @@ dotenv.config({ quiet: true }) // Load environment
 import 'config'
 import { assignRoutes } from './/routes'
 import { assignSockets } from './/sockets'
-import { logger, config, database, jwt, crypto, socket } from '@src/utils'
+import { logger, config, database, jwt, crypto, socket, peer } from '@src/utils'
 
 import { UserService } from '@src/services'
 import { Interceptors } from '@src/interceptors'
@@ -36,6 +36,7 @@ export async function bootstrap() {
 
 	const io = await socket.register(httpServer)
 	assignSockets(io)
+	const gun = await peer.registerDeamon(httpServer)
 
 	return httpServer
 }

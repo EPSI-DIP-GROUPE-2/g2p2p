@@ -18,6 +18,10 @@ encryption:
 jwt:
   secure: JWT_SECURE
   expire: JWT_EXPIRE
+  cookie: JWT_COOKIE
   keys:
     private: JWT_KEY_PRIVATE
     public: JWT_KEY_PUBLIC
+
+peer:
+  path: PEER_PATH

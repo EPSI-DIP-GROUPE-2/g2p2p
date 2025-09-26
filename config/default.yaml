@@ -19,6 +19,10 @@ jwt:
   secure: false
   algorithm: RS256
   expire: 1296000000 # 15 days
+  cookie: accessToken
   keys:
     private: /etc/opt/echo/jwt/private.key
     public: /etc/opt/echo/jwt/public.key
+
+peer:
+  path: http://localhost

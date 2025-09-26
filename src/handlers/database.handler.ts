@@ -11,6 +11,7 @@ import {
 
 export enum Models {
 	USER = 'user',
+	CONTACT = 'contact',
 }
 
 export class NotFound extends Data.TaggedError('DatabaseNotFound') {
@@ -35,6 +36,9 @@ export class NotFound extends Data.TaggedError('DatabaseNotFound') {
 		let message = 'Item not found.'
 
 		switch (this.model) {
+			case Models.CONTACT:
+				message = 'Contact not found.'
+				break
 			case Models.USER:
 				message = 'User not found.'
 				break

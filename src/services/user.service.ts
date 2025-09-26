@@ -2,7 +2,6 @@ import { Data, Effect } from 'effect'
 import { logger, crypto } from '@src/utils'
 import { UserInput, UserModel } from '@src/models'
 import { DatabaseHandler } from '@src/handlers'
-import { resolve4 } from 'dns'
 
 export const getCount = Effect.tryPromise({
 	try: () => {
