@@ -54,6 +54,7 @@ export const listHandler = (_req: Request, res: Response) =>
 						({
 							id: message.id,
 							to: message.to,
+							from: message.from,
 							status: message.status,
 							content: message.content,
 							timestamp: message.timestamp,
