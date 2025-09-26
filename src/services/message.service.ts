@@ -1,9 +1,9 @@
 import { Effect } from 'effect'
 import { ContactModel, MessageModel } from '@src/models'
-import { logger } from '@src/utils'
 import { DatabaseHandler, MessageHandler } from '@src/handlers'
-import { socket, peer, crypto } from '@src/utils'
+import { socket, peer, crypto, logger } from '@src/utils'
 import { ContactService } from '.'
+import { PeerMessage } from '@src/types/message.type'
 import { identifier } from '@src/utils/crypto.util'
 
 export const create = ({
@@ -26,6 +26,7 @@ export const create = ({
 		},
 		catch: (error: unknown) => new DatabaseHandler.QueryError(error),
 	}).pipe(
+		Effect.tap(() => logger.info('Saved message')),
 		Effect.tap(({ to, from, content, timestamp, status }) =>
 			socket.emit('messages:append', { to, from, content, timestamp, status })
 		)
@@ -89,6 +90,13 @@ export const send = (message: MessageModel) =>
 							catch: () => new MessageHandler.UnreachableError(),
 						}),
 					onFailure: error => {
+						peer.db.get('messages').set({
+							from: message.from,
+							to: pool.identifier,
+							content: pool.encryptedMessage,
+							signature: pool.signature,
+							timestamp: message.timestamp.toString(),
+						})
 						return Effect.fail(error)
 					},
 				})
@@ -98,6 +106,7 @@ export const send = (message: MessageModel) =>
 
 export const receive = (input: PeerMessage) =>
 	crypto.keys.pipe(
+		Effect.tap(() => logger.info('Received a message')),
 		Effect.map(({ privateKey }) => crypto.decryptString(privateKey, input.content)),
 		Effect.flatMap(decrypted =>
 			create({

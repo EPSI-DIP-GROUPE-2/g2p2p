@@ -1,9 +1,12 @@
 import { Data, Effect } from 'effect'
 import { Server } from 'http'
-import Gun from 'gun'
+import Gun, { IGunInstance } from 'gun'
 import { Peer } from '@src/types/peer.type'
 import { config, crypto, logger } from '@src/utils'
+import { PeerMessage } from '@src/types/message.type'
+import { MessageService } from '@src/services'
 
+export let db: IGunInstance
 export const peers: Peer[] = []
 
 export class PeerInitializationError extends Data.TaggedError('PeerInitialization') {}
@@ -26,6 +29,7 @@ export const registerDeamon = (http: Server) =>
 	}).pipe(
 		Effect.flatMap(gun =>
 			Effect.gen(function* () {
+				db = gun
 				gun.on('hi', peer => console.log('Peer connected:', peer.url))
 
 				const me = yield* config.get<string>('peer.path')
@@ -58,6 +62,22 @@ export const registerDeamon = (http: Server) =>
 								publicKey: crypto.trimKey(p.publicKey),
 							})
 							logger.info(`Reached ${p.identifier} at ${p.path}`)
+						}
+					})
+
+				gun
+					.get('messages')
+					.map()
+					.on((m, id) => {
+						if (!m) return
+						const message: PeerMessage = m as PeerMessage
+						if (message.to === identifier) {
+							MessageService.receive(message).pipe(
+								Effect.tap(() => {
+									gun.get('messages').get(id).put(null)
+								}),
+								Effect.runPromise
+							)
 						}
 					})
 			})
