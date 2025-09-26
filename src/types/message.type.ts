@@ -22,3 +22,11 @@ export enum MessageStatus {
 	 */
 	VIEWED = 'VIEWED',
 }
+
+export interface PeerMessage {
+	from: string
+	to: string
+	content: string
+	signature: string
+	timestamp: string
+}

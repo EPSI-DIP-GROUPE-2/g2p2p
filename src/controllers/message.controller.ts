@@ -20,12 +20,14 @@ export const createHandler = (
 			content: req.body.content,
 		})
 	}).pipe(
+		Effect.tap(MessageService.send),
 		Effect.flatMap(message =>
 			Effect.succeed({
 				status: 200,
 				data: {
 					id: message.id,
 					to: message.to,
+					from: message.from,
 					status: message.status,
 					content: message.content,
 					timestamp: message.timestamp,
@@ -59,6 +61,40 @@ export const listHandler = (_req: Request, res: Response) =>
 				),
 			} as Json)
 		),
+		Effect.catchAll(error => {
+			logger.error(`${error.title} ${error.message}`)
+
+			return Effect.succeed({ ...ResponseHandler.UnexpectedErrorResponse, message: error.message })
+		}),
+		Effect.andThen(response => res.status(response.status).json(response)),
+		Effect.runPromise
+	)
+
+export const receiveHandler = (
+	{ body }: Request<unknown, unknown, MessageSchema.Receive['body']>,
+	res: Response
+) =>
+	MessageService.receive({
+		from: body.from,
+		to: body.to,
+		signature: body.signature,
+		content: body.content,
+		timestamp: body.timestamp,
+	}).pipe(
+		Effect.flatMap(message =>
+			Effect.succeed({
+				status: 200,
+				data: {
+					id: message.id,
+					to: message.to,
+					from: message.from,
+					status: message.status,
+					content: message.content,
+					timestamp: message.timestamp,
+				} as Partial<MessageModel>,
+			} as Json)
+		),
+
 		Effect.catchAll(error => {
 			logger.error(`${error.title} ${error.message}`)
 
